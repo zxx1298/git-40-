@@ -104,6 +104,48 @@
     })
 
 
+        // $(function() {
+      //   $(".input_sub").on("click", function(e) {
+      //     e.preventDefault();
+
+      //     var userName = $(".input_txt")
+      //       .val()
+      //       .trim();
+      //     var userPwd = $(".input_pass")
+      //       .val()
+      //       .trim();
+
+      //     if (userName == "" || userPwd == "") {
+      //       // alert('请输入用户名和密码')
+      //       $("#myModal").modal();
+      //       $(".modal-body").text("请输入用户名和密码");
+      //       return;
+      //     }
+
+      //     $.ajax({
+      //       type: "post",
+      //       // url:'http://localhost:8080/api/v1/admin/user/login',
+      //       url: window.BigNew.user_login,
+
+      //       data: {
+      //         username: userName,
+      //         password: userPwd
+      //       },
+      //       success: function(res) {
+      //         $("#myModal").modal();
+      //         $(".modal-body").text(res.msg);
+      //         if (res.code == 200) {
+      //           window.localStorage.setItem("token", res.token);
+      //           $("#myModal").on("hidden.bs.modal", function(e) {
+      //             window.location.href = "./index.html";
+      //           });
+      //         }
+      //       }
+      //     });
+      //   });
+      // });
+
+
   
   </script>
 
