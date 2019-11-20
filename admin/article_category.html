@@ -31,25 +31,172 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>奇趣事</td>
-                        <td>funny</td>
-                        <td class="text-center">
-                            <a href="javascript:void(0)" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
-                            <a href="javascript:void(0)" class="btn btn-danger btn-xs">删除</a>
-                        </td>
-                    </tr>
+                    
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-center">
                             <a href="javascript:void(0)" class="btn btn-success" id="xinzengfenlei" data-toggle="modal"
-                                data-target="#myModal">新增分类</a>
+                                 data-target="#myModal">新增分类</a>
                         </td>
                     </tr>
                 </tfoot>
             </table>
         </div>
     </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="exampleModalLabel">文章分类</h4>
+                </div>
+                <div class="modal-body">
+                  <form>
+                        <input type="hidden" name="" id="categoryId" />
+                    <div class="form-group">
+                      <label for="recipient-name" class="control-label">文章分类名称:</label>
+                      <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                      <label for="message-text" class="control-label">文字分类别名</label>
+                      <textarea class="form-control" id="message-text"></textarea>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-cancel">取消</button>
+                  <button type="button" class="btn btn-primary" id="btn-confirm">确认</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
+    <script src="./libs/http.js"></script>
+    <script type="text/html" id="list">
+        {{each data}}
+            <tr>
+                <td>{{$value.name}}</td>
+                <td>{{$value.slug}}</td>
+                <td class="text-center">
+                    <a href="javascript:void(0)" data-id="{{$value.id}}" data-toggle="modal" class=" btn btn-info btn-xs"  data-target="#myModal">编辑</a>
+                    <a href="javascript:void(0)" data-id="{{$value.id}}" class="btn btn-danger btn-xs  btn-delete"  >删除</a>
+                </td>
+            </tr>
+        {{/each}}
+    </script>
+    <script>
+        
+        $(function(){
+            getData()
+                function getData(){
+                    $.get({
+                url:BigNew.category_list,
+                success:function (res) {
+                    var htmlStr=template('list',res)
+                    // console.log(htmlStr);
+                    $('tbody').html(htmlStr) 
+                }
+
+            })
+         }
+         $('#btn-cancel').on('click',function(){
+            $('.modal-body form')[0].reset();
+         })
+
+            $('#myModal').on('show.bs.modal',function(e){
+                // var aa=e.relatedTarget
+                if(e.relatedTarget===$('#xinzengfenlei')[0]){
+                    $('#exampleModalLabel').text('新增文章分类')
+                    $('#btn-confirm').text('新曾').addClass('btn-success').removeClass('btn-primary')
+                    $('.modal-body form')[0].reset()
+                }else{
+                    $('#exampleModalLabel').text('编辑文章分类')
+                    $('#btn-confirm').text('编辑').addClass('btn-primary').removeClass('btn-success')
+                    // $('.modal-body form')[0].reset()
+                    // 点击某个编辑按钮需要获取到他的id
+                    var cateId=$(e.relatedTarget).attr('data-id')
+                    // console.log(cateId);
+                    $.get({
+                    url:BigNew.category_search,
+                    data:{
+                        id:cateId
+                    },
+                    success:function (res) {
+                        // console.log(res);
+                        
+                          if(res.code==200){
+                            $('#recipient-name').val(res.data[0].name)
+                            $('#message-text').val(res.data[0].slug)
+                            $('#categoryId').val(res.data[0].id)
+                          }
+                       }
+                    })
+                  }
+                
+                  $('#btn-confirm').on('click',function(){
+                      if($(this).hasClass('btn-success')){
+                          var name=$('#recipient-name').val()
+                          var slug=$('#message-text').val()
+                          $.post({
+                              url:BigNew.category_add,
+                              data:{
+                                name:name,
+                                slug:slug
+                              },
+                              success:function (res) {
+                                //   console.log(res);
+                                if(res.code==201){
+                                    $('#myModal').modal('hide')
+                                    getData()
+                                }
+                                  
+                              }
+                          })
+                      }else{
+                        var name=$('#recipient-name').val()
+                          var slug=$('#message-text').val()
+                          var id=$('#categoryId').val()
+                          $.post({
+                              url:BigNew.category_edit,
+                              data:{
+                                  id:id,
+                                  name:name,
+                                  slug:slug
+                              },
+                              success:function(res){
+                                // console.log(res);
+                                $('#myModal').modal('hide');
+                                getData();
+                                
+                              }
+                          })
+                      }
+                  })
+
+            })
+            $('tbody').on('click','.btn-delete',function(){
+                var ans=confirm('亲，你真的确定要删除吗')
+                var deleteId=$(this).attr('data-id')
+                if(ans){
+                    $.post({
+                    url:BigNew.category_delete,
+                    data :{
+                        id:deleteId
+                    },
+                    success:function(res){
+                        if(res.code==204){
+                            getData();
+                        }
+                    }
+                })
+                }
+            })
+
+
+        })
+    
+    </script>
+
+    </body>>
 </html>
