@@ -100,17 +100,21 @@
 
             })
          }
+         //点击取消键清空内容
          $('#btn-cancel').on('click',function(){
+             //原生的表单对象上有一个方法： reset()用来重置表单的。
             $('.modal-body form')[0].reset();
          })
-
+                ////当点击某个按钮的时候显示模态框，会触发一个事件show.bs.modal
             $('#myModal').on('show.bs.modal',function(e){
                 // var aa=e.relatedTarget
                 if(e.relatedTarget===$('#xinzengfenlei')[0]){
+                    //表示我们点击的新增
                     $('#exampleModalLabel').text('新增文章分类')
                     $('#btn-confirm').text('新曾').addClass('btn-success').removeClass('btn-primary')
                     $('.modal-body form')[0].reset()
                 }else{
+                    //表示我们点击了编辑
                     $('#exampleModalLabel').text('编辑文章分类')
                     $('#btn-confirm').text('编辑').addClass('btn-primary').removeClass('btn-success')
                     // $('.modal-body form')[0].reset()
@@ -133,7 +137,7 @@
                        }
                     })
                   }
-                
+                  //给新增/编辑注册点击事件
                   $('#btn-confirm').on('click',function(){
                       if($(this).hasClass('btn-success')){
                           var name=$('#recipient-name').val()
@@ -175,7 +179,9 @@
                   })
 
             })
+            //给删除按钮添加点击事件
             $('tbody').on('click','.btn-delete',function(){
+                //当要删除时给用户一个提示
                 var ans=confirm('亲，你真的确定要删除吗')
                 var deleteId=$(this).attr('data-id')
                 if(ans){
