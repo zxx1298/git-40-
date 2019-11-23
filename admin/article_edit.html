@@ -109,11 +109,11 @@
                 editor.create();
             
 
-
+             //获取并渲染文章信息
              $.get({
                  url:BigNew.category_list,
                  success:function(res){
-                    //  console.log(res);
+                     console.log(res);
                     if(res.code==200){
                         var htmlStr =  template('com-list',res)
                         $('select.category').html(htmlStr)
@@ -121,7 +121,7 @@
                      
                  }
              })
-
+            //获取我们点击编辑的文章的id
 
              function each2Obj(str){
             str = str.slice(1)
