@@ -151,7 +151,7 @@
         <div class="common_wrap">
           <h3><i class="fa fa-bar-chart"></i> 一周热门排行</h3>
           <ul class="content_list hotrank_list">
-            <li>
+            <!-- <li>
               <span class="first">1</span
               ><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a>
             </li>
@@ -166,13 +166,13 @@
             <li><span>4</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
             <li><span>5</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
             <li><span>6</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-            <li><span>7</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
+            <li><span>7</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li> -->
           </ul>
         </div>
         <div class="common_wrap">
           <h3><i class="fa fa-commenting-o"></i> 最新评论</h3>
           <ul class="content_list comment_list">
-            <li>
+            <!-- <li>
               <span>山</span>
               <b><em>山治</em> 9个月前(08-14)说:</b>
               <strong>挺会玩的</strong>
@@ -204,7 +204,7 @@
               <span>乔</span>
               <b><em>乔峰</em> 9个月前(08-14)说:</b>
               <strong>挺会玩的</strong>
-            </li>
+            </li> -->
           </ul>
         </div>
         <div class="common_wrap">
@@ -270,6 +270,27 @@
           </div>
           {{/each}}
     </script>
+    <script type="text/html" id="paihan-list">
+    {{each data as val index}}
+    <li>
+      <span class="first">1</span
+      ><a href="./article.html?id={{val.id}}">{{val.title}}</a>
+    </li>
+    {{/each}}
+    </script>
+
+
+    <script type="text/html" id="res-list">
+      {{each data}}
+      <li>
+        <span>山</span>
+        <b><em>{{$value.author}}</em> 9个月前({{$value.date}})说:</b>
+        <strong>{{$value.intro}}</strong>
+      </li>
+      {{/each}}
+    </script>
+
+
 
     <script>
       $(function() {
@@ -290,6 +311,27 @@
             $(".common_news").html(htmlStr);
           }
         });
+
+        $.get({
+          url:'http://localhost:8080/api/v1/index/rank',
+          success:function(res) {
+            var htmlStr = template("paihan-list", res);
+            $(".hotrank_list").html(htmlStr);
+            // console.log(res);
+            
+          }
+        })
+        $.get({
+          url:'http://localhost:8080/api/v1/index/latest_comment',
+          success:function(res) {
+            var htmlStr = template("res-list", res);
+            $(".comment_list").html(htmlStr);
+            // console.log(res);
+            
+          }
+        })
+
+
       });
     </script>
   </body>

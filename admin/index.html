@@ -75,9 +75,11 @@
             }
             
         })
-   
+//    给退出按钮添加个点击事件
         $('.logout').on('click',function(){
+            // 删除当前的token值
             window.localStorage.removeItem('token')
+            // 点击退出后跳转回登录页面
             window.location.href='./login.html'
         })
    
